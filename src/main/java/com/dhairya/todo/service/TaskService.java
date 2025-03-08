@@ -26,6 +26,7 @@ public class TaskService {
         if(task.isPresent()) {
             tasks.add(task.get());
             List<Task> subTasks = taskRepository.findAllByParentId(id);
+            tasks.addAll(subTasks);
         }
         return tasks;
     }
