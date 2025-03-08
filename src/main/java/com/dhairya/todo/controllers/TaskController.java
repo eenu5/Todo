@@ -48,31 +48,23 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Task> updateTask(@PathVariable Long id, @RequestBody TaskRequest task) {
-        try {
-            return taskService.updateTask(id, task);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Object> updateTask(@PathVariable Long id, @RequestBody TaskRequest task) {
+        return taskService.updateTask(id, task);
     }
 
     @PutMapping("/{id}/sub-tasks/{subTaskId}")
     public ResponseEntity<Object> updateTask(@PathVariable Long id, @PathVariable Long subTaskId, @RequestBody TaskRequest task) {
-        try {
-            return taskService.updateSubTask(id, subTaskId, task);
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return taskService.updateSubTask(id, subTaskId, task);
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> updateTask(@PathVariable Long id, @RequestBody Integer status) {
-        return ResponseEntity.ok(taskService.updateTaskStatus(id, status));
+    public ResponseEntity<Object> updateTaskStatus(@PathVariable Long id, @RequestBody Integer status) {
+        return taskService.updateTaskStatus(id, status);
     }
 
     @PatchMapping("/{id}/sub-tasks/{subTaskId}/status")
-    public ResponseEntity<Object> updateTask(@PathVariable Long id, @PathVariable Long subTaskId, @RequestBody Integer status) {
-        return ResponseEntity.ok(taskService.updateSubTaskStatus(id, subTaskId, status));
+    public ResponseEntity<Object> updateSubTaskStatus(@PathVariable Long id, @PathVariable Long subTaskId, @RequestBody Integer status) {
+        return taskService.updateSubTaskStatus(id, subTaskId, status);
     }
 
     @DeleteMapping("/{id}")

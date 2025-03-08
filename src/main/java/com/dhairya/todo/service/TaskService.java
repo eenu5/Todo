@@ -1,5 +1,6 @@
 package com.dhairya.todo.service;
 
+import com.dhairya.todo.models.ErrorResponse;
 import com.dhairya.todo.models.Task;
 import com.dhairya.todo.models.TaskRequest;
 import com.dhairya.todo.repositories.TaskRepository;
@@ -46,10 +47,10 @@ public class TaskService {
         return ResponseEntity.ok(task);
     }
 
-    public ResponseEntity<Task> updateTask(Long id, TaskRequest taskRequest) {
+    public ResponseEntity<Object> updateTask(Long id, TaskRequest taskRequest) {
         Optional<Task> task = taskRepository.findById(id);
         if (!task.isPresent()) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
         }
         task.get().setName(taskRequest.getName())
                 .setDescription(taskRequest.getDescription())
@@ -63,11 +64,11 @@ public class TaskService {
     public ResponseEntity<Object> updateSubTask(Long id, Long subTaskId, TaskRequest taskRequest) {
         Optional<Task> parentTask = taskRepository.findById(id);
         if (!parentTask.isPresent()) {
-            return ResponseEntity.status(404).body("Parent task not found");
+            return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
         }
         Optional<Task> subTask = taskRepository.findById(subTaskId);
         if (!subTask.isPresent()) {
-            return ResponseEntity.status(404).body("Sub task not found");
+            return ResponseEntity.status(404).body(new ErrorResponse("Sub task not found"));
         }
         subTask.get().setName(taskRequest.getName())
                 .setDescription(taskRequest.getDescription())
@@ -81,7 +82,7 @@ public class TaskService {
     public ResponseEntity<Object> updateTaskStatus(Long id, Integer status) {
         Optional<Task> task = taskRepository.findById(id);
         if (!task.isPresent()) {
-            return ResponseEntity.status(404).body("Parent task not found");
+            return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
         }
         task.get().setStatus(status);
         taskRepository.save(task.get());
@@ -91,11 +92,11 @@ public class TaskService {
     public ResponseEntity<Object> updateSubTaskStatus(Long id, Long subTaskId, Integer status) {
         Optional<Task> parentTask = taskRepository.findById(id);
         if (!parentTask.isPresent()) {
-            return ResponseEntity.status(404).body("Parent task not found");
+            return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
         }
         Optional<Task> subTask = taskRepository.findById(subTaskId);
         if (!subTask.isPresent()) {
-            return ResponseEntity.status(404).body("Sub task not found");
+            return ResponseEntity.status(404).body(new ErrorResponse("Sub task not found"));
         }
         subTask.get().setStatus(status);
         taskRepository.save(subTask.get());
