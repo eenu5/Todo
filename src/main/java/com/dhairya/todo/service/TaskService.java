@@ -38,7 +38,7 @@ public class TaskService {
         return tasks;
     }
 
-    private double findProgress(Long id) {
+    private Double findProgress(Long id) {
         int count = 0;
         int completedTasks =0;
         List<Task> subTasks = taskRepository.findAllByParentId(id);
@@ -48,9 +48,9 @@ public class TaskService {
                 completedTasks++;
             }
         }
-        double progress =0;
+        Double progress = null;
         if(count>0){
-            progress = (completedTasks * 100) / count;
+            progress = (double) ((completedTasks * 100) / count);
         }
         return progress;
     }

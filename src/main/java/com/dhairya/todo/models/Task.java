@@ -1,12 +1,14 @@
 package com.dhairya.todo.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
+@JsonInclude(JsonInclude.Include.NON_NULL)  // Hides null fields in response
 @Table(name = "tasks")
 public class Task {
     @Id
@@ -169,7 +171,7 @@ public class Task {
     }
 
     public Task setProgress(Double progress) {
-        this.progress = progress;
+        this.progress = progress!=null?progress: getStatus()==Status.COMPLETED?100.0:0.0;
         return this;
     }
 }
