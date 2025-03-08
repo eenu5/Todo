@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +20,14 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Optional<Task> getTaskById(Long id) {
-        return taskRepository.findById(id);
+    public List<Task> getTaskById(Long id) {
+        List<Task> tasks = new ArrayList<>();
+        Optional<Task> task = taskRepository.findById(id);
+        if(task.isPresent()) {
+            tasks.add(task.get());
+            List<Task> subTasks = taskRepository.findAllByParentId(id);
+        }
+        return tasks;
     }
 
     public Task createTask(TaskRequest taskRequest) {

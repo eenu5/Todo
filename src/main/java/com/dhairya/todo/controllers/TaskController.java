@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/tasks")
@@ -23,13 +24,17 @@ public class TaskController {
         if (tasks.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
+        tasks = tasks.stream().filter(t->t.getParentId() == null).collect(Collectors.toList());
         return ResponseEntity.ok(tasks);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Optional<Task> task = taskService.getTaskById(id);
-        return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<List<Task>> getTaskById(@PathVariable Long id) {
+        List<Task> tasks = taskService.getTaskById(id);
+        if (tasks.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(tasks);
     }
 
     @PostMapping
