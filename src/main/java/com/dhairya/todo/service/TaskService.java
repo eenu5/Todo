@@ -128,5 +128,9 @@ public class TaskService {
 
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
+        List<Task> subTasks = taskRepository.findAllByParentId(id);
+        for (Task subTask : subTasks) {
+            taskRepository.deleteById(subTask.getId());
+        }
     }
 }
