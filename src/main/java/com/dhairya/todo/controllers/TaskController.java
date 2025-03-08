@@ -1,5 +1,6 @@
 package com.dhairya.todo.controllers;
 
+import com.dhairya.todo.models.PatchRequest;
 import com.dhairya.todo.models.Task;
 import com.dhairya.todo.models.TaskRequest;
 import com.dhairya.todo.service.TaskService;
@@ -58,12 +59,12 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Object> updateTaskStatus(@PathVariable Long id, @RequestBody Integer status) {
+    public ResponseEntity<Object> updateTaskStatus(@PathVariable Long id, @RequestBody PatchRequest status) {
         return taskService.updateTaskStatus(id, status);
     }
 
     @PatchMapping("/{id}/sub-tasks/{subTaskId}/status")
-    public ResponseEntity<Object> updateSubTaskStatus(@PathVariable Long id, @PathVariable Long subTaskId, @RequestBody Integer status) {
+    public ResponseEntity<Object> updateSubTaskStatus(@PathVariable Long id, @PathVariable Long subTaskId, @RequestBody PatchRequest status) {
         return taskService.updateSubTaskStatus(id, subTaskId, status);
     }
 

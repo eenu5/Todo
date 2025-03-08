@@ -1,6 +1,7 @@
 package com.dhairya.todo.service;
 
 import com.dhairya.todo.models.ErrorResponse;
+import com.dhairya.todo.models.PatchRequest;
 import com.dhairya.todo.models.Task;
 import com.dhairya.todo.models.TaskRequest;
 import com.dhairya.todo.repositories.TaskRepository;
@@ -79,17 +80,17 @@ public class TaskService {
         return ResponseEntity.ok(subTask.get());
     }
 
-    public ResponseEntity<Object> updateTaskStatus(Long id, Integer status) {
+    public ResponseEntity<Object> updateTaskStatus(Long id, PatchRequest status) {
         Optional<Task> task = taskRepository.findById(id);
         if (!task.isPresent()) {
             return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
         }
-        task.get().setStatus(status);
+        task.get().setStatus(status.getStatus());
         taskRepository.save(task.get());
         return ResponseEntity.ok(task.get());
     }
 
-    public ResponseEntity<Object> updateSubTaskStatus(Long id, Long subTaskId, Integer status) {
+    public ResponseEntity<Object> updateSubTaskStatus(Long id, Long subTaskId, PatchRequest status) {
         Optional<Task> parentTask = taskRepository.findById(id);
         if (!parentTask.isPresent()) {
             return ResponseEntity.status(404).body(new ErrorResponse("Parent task not found"));
@@ -98,7 +99,7 @@ public class TaskService {
         if (!subTask.isPresent()) {
             return ResponseEntity.status(404).body(new ErrorResponse("Sub task not found"));
         }
-        subTask.get().setStatus(status);
+        subTask.get().setStatus(status.getStatus());
         taskRepository.save(subTask.get());
         return ResponseEntity.ok(subTask.get());
     }
