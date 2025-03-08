@@ -19,18 +19,40 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public List<Task> getAllTasks() {
-        return taskRepository.findAll();
+        List<Task> tasks =  taskRepository.findAll();
+        for (Task task : tasks) {
+            task.setProgress(findProgress(task.getId()));
+        }
+        return tasks;
     }
 
     public List<Task> getTaskById(Long id) {
         List<Task> tasks = new ArrayList<>();
         Optional<Task> task = taskRepository.findById(id);
         if(task.isPresent()) {
-            tasks.add(task.get());
             List<Task> subTasks = taskRepository.findAllByParentId(id);
+            task.get().setProgress(findProgress(id));
             tasks.addAll(subTasks);
+            tasks.add(task.get());
         }
         return tasks;
+    }
+
+    private double findProgress(Long id) {
+        int count = 0;
+        int completedTasks =0;
+        List<Task> subTasks = taskRepository.findAllByParentId(id);
+        for (Task subTask : subTasks) {
+            count++;
+            if(subTask.getStatus() == Task.Status.COMPLETED) {
+                completedTasks++;
+            }
+        }
+        double progress =0;
+        if(count>0){
+            progress = (completedTasks * 100) / count;
+        }
+        return progress;
     }
 
     public Task createTask(TaskRequest taskRequest) {

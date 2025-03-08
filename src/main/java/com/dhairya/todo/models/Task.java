@@ -44,7 +44,7 @@ public class Task {
     }
 
 
-    enum Status { // To add more types of status
+    public enum Status { // To add more types of status
         PENDING(100),
         COMPLETED(200);
 
@@ -70,7 +70,7 @@ public class Task {
         }
     }
 
-    enum Priority { // To add more types of priority
+    public enum Priority { // To add more types of priority
         LOW(100),
         MEDIUM(200),
         HIGH(300);
